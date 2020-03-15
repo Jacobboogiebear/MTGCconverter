@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTGC Converter</title>
+    <style>
+        * {
+            white-space: pre;
+        }
+    </style>
+</head>
+<body>
+    <textarea id="init" rows="50" cols="50"></textarea><button onclick="convert()">Convert</button><textarea id="after" cols="50" rows="50"></textarea>
+    <script>
+        function convert() {
+            let data = document.getElementById('init').value;
+            let pre = 
+`<?xml version="1.0" encoding="UTF-8"?>
+<cockatrice_deck version="1">
+    <deckname></deckname>
+    <comments></comments>
+    <zone name="main">\n`;
+            let post = 
+`   </zone>
+</cockatrice_deck>
+`;
+            let mid = '';
+            let arr = data.split('\n');
+            arr.pop();
+            arr.forEach(element => {
+                let title = element.split(' ');
+                delete title[0];
+                title = title.join(' ').substring(1, title.join(' ').length - 2).split(' (')[0];
+                let amount = element.split(' ')[0];
+                mid += `        <card number="${amount}" name="${title}"/>\n`;
+            });
+            document.getElementById('after').value = pre + mid + post;
+        }
+    </script>
+</body>
+</html>
